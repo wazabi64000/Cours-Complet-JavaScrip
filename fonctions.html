@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3. Les Fonctions en JavaScript</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #f8f9fa;
+            --text: #333;
+            --code-bg: #f4f4f4;
+            --border: #ddd;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #fff;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        nav li {
+            margin: 0 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #1a73e8;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .example, .exercise {
+            background-color: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .example h4, .exercise h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .solution {
+            background-color: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            margin-top: 1rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Module 3 : Les Fonctions en JavaScript</h1>
+        <p>Fonctions avancées et paradigmes de programmation</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="dom.html">1. Le DOM</a></li>
+            <li><a href="evenements.html">2. Les Événements</a></li>
+            <li><a href="fonctions.html" class="active">3. Les Fonctions</a></li>
+            <li><a href="modules-classes.html">4. Modules & Classes</a></li>
+            <li><a href="nodejs.html">5. Node.js</a></li>
+            <li><a href="react.html">6. React</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>1. Déclarations et Expressions de Fonctions</h2>
+            
+            <h3>Déclaration de Fonction</h3>
+            <p>Hoistée (déplacée en haut du scope). Disponible avant sa déclaration.</p>
+            <pre><code>function saluer(nom) {
+    return `Bonjour ${nom}`;
+}
+console.log(saluer('Marie')); // Fonctionne</code></pre>
+            
+            <h3>Expression de Fonction</h3>
+            <p>Non hoistée. Doit être définie avant utilisation.</p>
+            <pre><code>const saluer = function(nom) {
+    return `Bonjour ${nom}`;
+};
+console.log(saluer('Marie'));</code></pre>
+            
+            <h3>Fonction Fléchée (Arrow Function)</h3>
+            <p>Syntaxe concise. Pas de <code>this</code> propre, pas de <code>arguments</code>.</p>
+            <pre><code>const saluer = (nom) => `Bonjour ${nom}`;
+const addition = (a, b) => a + b;
+const carre = x => x * x;</code></pre>
+        </section>
+
+        <section>
+            <h2>2. Paramètres et Valeurs par Défaut</h2>
+            
+            <h3>Paramètres par Défaut</h3>
+            <pre><code>function creerUtilisateur(nom = 'Anonyme', age = 18) {
+    return { nom, age };
+}</code></pre>
+            
+            <h3>Paramètre Rest</h3>
+            <p>Collecte les arguments restants dans un tableau.</p>
+            <pre><code>function somme(...nombres) {
+    return nombres.reduce((total, n) => total + n, 0);
+}
+somme(1, 2, 3, 4); // 10</code></pre>
+            
+            <h3>Paramètre Spread</h3>
+            <p>Décompose un tableau ou objet en arguments.</p>
+            <pre><code>const nombres = [1, 2, 3];
+Math.max(...nombres); // 3</code></pre>
+        </section>
+
+        <section>
+            <h2>3. Portée (Scope) et Closures</h2>
+            
+            <h3>Scope Global vs Local</h3>
+            <pre><code>let global = 'global';
+
+function test() {
+    let local = 'local';
+    console.log(global); // accessible
+    console.log(local);  // accessible
+}
+console.log(local); // Erreur</code></pre>
+            
+            <h3>Block Scope (let/const)</h3>
+            <pre><code>if (true) {
+    let bloc = 'dans le bloc';
+}
+console.log(bloc); // Erreur</code></pre>
+            
+            <h3>Closures</h3>
+            <p>Fonction qui capture son environnement lexical.</p>
+            <pre><code>function creerCompteur() {
+    let count = 0;
+    return function() {
+        return ++count;
+    };
+}
+const compteur = creerCompteur();
+compteur(); // 1
+compteur(); // 2</code></pre>
+        </section>
+
+        <section>
+            <h2>4. Fonctions d'Ordre Supérieur</h2>
+            <p>Fonctions qui prennent ou retournent d'autres fonctions.</p>
+            
+            <h3>Callback</h3>
+            <pre><code>function executerCallback(cb) {
+    cb();
+}
+executerCallback(() => console.log('Callback exécuté'));</code></pre>
+            
+            <h3>Méthodes d'Array</h3>
+            <ul>
+                <li><code>map()</code> : Transformation</li>
+                <li><code>filter()</code> : Filtrage</li>
+                <li><code>reduce()</code> : Réduction</li>
+                <li><code>forEach()</code> : Itération</li>
+            </ul>
+            <pre><code>const nombres = [1, 2, 3, 4];
+const carres = nombres.map(n => n * n);
+const pairs = nombres.filter(n => n % 2 === 0);
+const somme = nombres.reduce((a, b) => a + b, 0);</code></pre>
+        </section>
+
+        <section>
+            <h2>5. Récursivité et Mémoïsation</h2>
+            
+            <h3>Récursivité</h3>
+            <pre><code>function factorielle(n) {
+    if (n <= 1) return 1;
+    return n * factorielle(n - 1);
+}
+factorielle(5); // 120</code></pre>
+            
+            <h3>Mémoïsation</h3>
+            <p>Cache des résultats pour éviter recalculs.</p>
+            <pre><code>function memoize(fn) {
+    const cache = {};
+    return function(arg) {
+        if (cache[arg] === undefined) {
+            cache[arg] = fn(arg);
+        }
+        return cache[arg];
+    };
+}
+
+const fibMemo = memoize(function(n) {
+    if (n <= 1) return n;
+    return fibMemo(n - 1) + fibMemo(n - 2);
+});</code></pre>
+        </section>
+
+        <section>
+            <h2>Exemples Complets</h2>
+            
+            <div class="example">
+                <h4>Exemple 1 : Calculateur de Panier avec Fonctions d'Ordre Supérieur</h4>
+                <p><strong>Problème</strong> : Créer un calculateur de panier avec taxes, réductions et formatage.</p>
+                <p><strong>Logique</strong> :
+                    1. Tableau d'articles avec prix
+                    2. Fonctions de transformation (taxe, réduction)
+                    3. Chaînage avec reduce
+                    4. Formatage monétaire
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Calculateur Panier&lt;/title&gt;
+    &lt;style&gt;
+        .cart { max-width: 500px; margin: 20px auto; font-family: Arial; }
+        .item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .total { font-weight: bold; margin-top: 15px; text-align: right; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="cart"&gt;
+        &lt;h2&gt;Panier d'achats&lt;/h2&gt;
+        &lt;div id="items"&gt;&lt;/div&gt;
+        &lt;div class="total"&gt;Total: &lt;span id="total"&gt;0.00&lt;/span&gt; €&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        const articles = [
+            { nom: 'Laptop', prix: 999 },
+            { nom: 'Souris', prix: 25 },
+            { nom: 'Clavier', prix: 75 },
+            { nom: 'Écran', prix: 299 }
+        ];
+
+        // Fonctions utilitaires
+        const ajouterTaxe = taux => prix => prix * (1 + taux);
+        const appliquerReduction = pourcentage => prix => prix * (1 - pourcentage);
+        const formaterPrix = prix => prix.toFixed(2);
+
+        // Fonction de calcul
+        function calculerTotal(articles, transformations = []) {
+            return articles
+                .map(a => a.prix)
+                .reduce((total, prix) => {
+                    let prixModifie = prix;
+                    transformations.forEach(fn => {
+                        prixModifie = fn(prixModifie);
+                    });
+                    return total + prixModifie;
+                }, 0);
+        }
+
+        // Application
+        const avecTaxe = ajouterTaxe(0.20); // 20% TVA
+        const avecReduction = appliquerReduction(0.10); // 10% promo
+
+        const total = calculerTotal(articles, [avecTaxe, avecReduction]);
+        
+        // Affichage
+        const itemsDiv = document.getElementById('items');
+        articles.forEach(a => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            const prixAvecTaxe = formaterPrix(avecTaxe(a.prix));
+            const prixFinal = formaterPrix(avecReduction(avecTaxe(a.prix)));
+            div.innerHTML = `&lt;span&gt;${a.nom}&lt;/span&gt;&lt;span&gt;${prixFinal} €&lt;/span&gt;`;
+            itemsDiv.appendChild(div);
+        });
+
+        document.getElementById('total').textContent = formaterPrix(total);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Liste d'articles avec prix après taxe (20%) et réduction (10%). Total calculé automatiquement avec formatage à deux décimales.</p>
+            </div>
+
+            <div class="example">
+                <h4>Exemple 2 : Générateur de Quiz avec Closures</h4>
+                <p><strong>Problème</strong> : Créer un quiz auto-géré avec score, timer et questions aléatoires.</p>
+                <p><strong>Logique</strong> :
+                    1. Banque de questions
+                    2. Closure pour état interne (score, question courante)
+                    3. Méthodes publiques (suivant, vérifier)
+                    4. Timer par question
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Quiz Dynamique&lt;/title&gt;
+    &lt;style&gt;
+        .quiz { max-width: 600px; margin: 30px auto; padding: 20px; font-family: Arial; }
+        .question { font-size: 1.2em; margin-bottom: 20px; }
+        .options { display: grid; gap: 10px; }
+        .option { padding: 12px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; }
+        .option:hover { background: #f0f0f0; }
+        .option.correct { background: #d4edda; border-color: #28a745; }
+        .option.incorrect { background: #f8d7da; border-color: #dc3545; }
+        .controls { margin-top: 20px; text-align: center; }
+        #timer { font-weight: bold; color: #e74c3c; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="quiz" id="quiz"&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        function creerQuiz(questions) {
+            let index = 0;
+            let score = 0;
+            let timer;
+            const tempsParQuestion = 15; // secondes
+
+            function melanger(array) {
+                return array.sort(() => Math.random() - 0.5);
+            }
+
+            function demarrerTimer(callback) {
+                let temps = tempsParQuestion;
+                document.getElementById('timer').textContent = temps;
+                timer = setInterval(() => {
+                    temps--;
+                    document.getElementById('timer').textContent = temps;
+                    if (temps <= 0) {
+                        clearInterval(timer);
+                        callback(false);
+                    }
+                }, 1000);
+            }
+
+            function afficherQuestion() {
+                if (index >= questions.length) {
+                    afficherResultat();
+                    return;
+                }
+
+                const q = questions[index];
+                const quizDiv = document.getElementById('quiz');
+                
+                quizDiv.innerHTML = `
+                    &lt;div&gt;
+                        &lt;p&gt;Question ${index + 1}/${questions.length}&lt;/p&gt;
+                        &lt;div class="question"&gt;${q.question}&lt;/div&gt;
+                        &lt;div class="options" id="options"&gt;&lt;/div&gt;
+                        &lt;div class="controls"&gt;
+                            &lt;span id="timer"&gt;${tempsParQuestion}&lt;/span&gt;s restantes
+                            &lt;button id="next" style="display:none; margin-left:20px;"&gt;Suivant&lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                `;
+
+                const optionsDiv = document.getElementById('options');
+                melanger(q.options).forEach((option, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'option';
+                    div.textContent = option;
+                    div.onclick = () => verifierReponse(option, div);
+                    optionsDiv.appendChild(div);
+                });
+
+                demarrerTimer(() => verifierReponse(null, null));
+            }
+
+            function verifierReponse(reponse, element) {
+                clearInterval(timer);
+                const correct = questions[index].reponse;
+                
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.textContent === correct) {
+                        opt.classList.add('correct');
+                    } else if (opt === element && reponse !== correct) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                if (reponse === correct) score++;
+                document.getElementById('next').style.display = 'inline-block';
+                
+                document.getElementById('next').onclick = () => {
+                    index++;
+                    afficherQuestion();
+                };
+            }
+
+            function afficherResultat() {
+                document.getElementById('quiz').innerHTML = `
+                    &lt;h2&gt;Quiz terminé !&lt;/h2&gt;
+                    &lt;p&gt;Score final: ${score}/${questions.length}&lt;/p&gt;
+                    &lt;p&gt;Pourcentage: ${Math.round((score/questions.length)*100)}%&lt;/p&gt;
+                    &lt;button onclick="location.reload()"&gt;Recommencer&lt;/button&gt;
+                `;
+            }
+
+            return { demarrer: afficherQuestion };
+        }
+
+        const questions = [
+            {
+                question: "Quelle est la capitale de la France ?",
+                options: ["Londres", "Berlin", "Paris", "Madrid"],
+                reponse: "Paris"
+            },
+            {
+                question: "Combien font 15 * 8 ?",
+                options: ["120", "115", "125", "130"],
+                reponse: "120"
+            },
+            {
+                question: "Quel est le plus grand océan ?",
+                options: ["Atlantique", "Pacifique", "Indien", "Arctique"],
+                reponse: "Pacifique"
+            }
+        ];
+
+        const quiz = creerQuiz(questions);
+        quiz.demarrer();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Quiz interactif avec timer 15s par question. Réponses en surbrillance (vert/rouge). Score final avec pourcentage. Bouton rejouer.</p>
+            </div>
+
+            <div class="example">
+                <h4>Exemple 3 : Système de Cache avec Mémoïsation</h4>
+                <p><strong>Problème</strong> : Créer un système de cache pour fonctions coûteuses (API, calculs).</p>
+                <p><strong>Logique</strong> :
+                    1. Fonction de mémoïsation générique
+                    2. Cache par arguments
+                    3. Gestion TTL (temps de vie)
+                    4. Interface de monitoring
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Cache Mémoïsation&lt;/title&gt;
+    &lt;style&gt;
+        .cache-app { max-width: 700px; margin: 30px auto; font-family: Arial; }
+        .controls { margin-bottom: 20px; }
+        input, button { padding: 8px; margin-right: 10px; }
+        .results { margin-top: 20px; }
+        .cache-entry { padding: 8px; border-bottom: 1px solid #eee; }
+        .hit { color: green; }
+        .miss { color: orange; }
+        .stats { margin-top: 20px; font-weight: bold; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="cache-app"&gt;
+        &lt;h2&gt;Système de Cache avec Mémoïsation&lt;/h2&gt;
+        
+        &lt;div class="controls"&gt;
+            &lt;input type="number" id="input" placeholder="Nombre pour factorielle"&gt;
+            &lt;button id="calc"&gt;Calculer&lt;/button&gt;
+            &lt;button id="clear"&gt;Vider Cache&lt;/button&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="results"&gt;
+            &lt;div id="result"&gt;&lt;/div&gt;
+            &lt;div id="cache"&gt;&lt;/div&gt;
+            &lt;div class="stats" id="stats"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // Fonction de mémoïsation avec TTL
+        function memoizeAvecTTL(fn, ttl = 10000) {
+            const cache = new Map();
+            let hits = 0, misses = 0;
+
+            return {
+                executer: function(...args) {
+                    const cle = JSON.stringify(args);
+                    const maintenant = Date.now();
+
+                    if (cache.has(cle)) {
+                        const { valeur, expire } = cache.get(cle);
+                        if (maintenant < expire) {
+                            hits++;
+                            return { valeur, source: 'cache' };
+                        } else {
+                            cache.delete(cle);
+                        }
+                    }
+
+                    const valeur = fn(...args);
+                    cache.set(cle, { 
+                        valeur, 
+                        expire: maintenant + ttl 
+                    });
+                    misses++;
+                    return { valeur, source: 'calcul' };
+                },
+                stats: () => ({ hits, misses, taille: cache.size }),
+                vider: () => {
+                    cache.clear();
+                    hits = 0; misses = 0;
+                },
+                afficher: () => {
+                    const entrees = [];
+                    for (const [cle, { valeur, expire }] of cache) {
+                        entrees.push({
+                            args: JSON.parse(cle),
+                            valeur,
+                            expire: new Date(expire).toLocaleTimeString()
+                        });
+                    }
+                    return entrees;
+                }
+            };
+        }
+
+        // Fonction coûteuse simulée
+        function factorielleLente(n) {
+            if (n <= 1) return 1;
+            let resultat = 1;
+            for (let i = 2; i <= n; i++) {
+                resultat *= i;
+                // Simulation calcul lourd
+                const start = Date.now();
+                while (Date.now() - start < 2) {}
+            }
+            return resultat;
+        }
+
+        // Création du cache
+        const cacheFactorielle = memoizeAvecTTL(factorielleLente, 30000); // 30s
+
+        // UI
+        document.getElementById('calc').addEventListener('click', () => {
+            const input = document.getElementById('input');
+            const n = parseInt(input.value);
+            
+            if (isNaN(n) || n < 0) {
+                document.getElementById('result').textContent = 'Veuillez entrer un nombre positif';
+                return;
+            }
+
+            const { valeur, source } = cacheFactorielle.executer(n);
+            const classe = source === 'cache' ? 'hit' : 'miss';
+            
+            document.getElementById('result').innerHTML = 
+                `Factorielle(${n}) = &lt;span class="${classe}"&gt;${valeur}&lt;/span&gt; [${source}]`;
+            
+            mettreAJourCache();
+            mettreAJourStats();
+        });
+
+        document.getElementById('clear').addEventListener('click', () => {
+            cacheFactorielle.vider();
+            mettreAJourCache();
+            mettreAJourStats();
+        });
+
+        function mettreAJourCache() {
+            const cacheDiv = document.getElementById('cache');
+            const entrees = cacheFactorielle.afficher();
+            
+            if (entrees.length === 0) {
+                cacheDiv.innerHTML = '&lt;p&gt;&lt;em&gt;Cache vide&lt;/em&gt;&lt;/p&gt;';
+                return;
+            }
+
+            cacheDiv.innerHTML = '&lt;h3&gt;Contenu du cache:&lt;/h3&gt;' + 
+                entrees.map(e => 
+                    `&lt;div class="cache-entry"&gt;
+                        factorielle(${e.args[0]}) = ${e.valeur} 
+                        (expire: ${e.expire})
+                    &lt;/div&gt;`
+                ).join('');
+        }
+
+        function mettreAJourStats() {
+            const stats = cacheFactorielle.stats();
+            document.getElementById('stats').textContent = 
+                `Cache: ${stats.taille} entrées | Hits: ${stats.hits} | Misses: ${stats.misses}`;
+        }
+
+        // Initialisation
+        mettreAJourStats();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Interface calculant factorielle avec cache 30s. Indicateur hit/miss. Affichage contenu cache et statistiques. Bouton vider cache.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Mini-Exercices</h2>
+            
+            <div class="exercise">
+                <h4>Exercice 1 : Générateur de Mot de Passe</h4>
+                <p><strong>Énoncé</strong> : Créez une fonction générant un mot de passe aléatoire avec options (longueur, types de caractères).</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Ensembles de caractères
+                        2. Fonction avec paramètres par défaut
+                        3. Construction chaîne aléatoire
+                        4. Mélange final
+                    </p>
+                    
+                    <pre><code>function genererMotDePasse(longueur = 12, 
+                           majuscules = true, 
+                           chiffres = true, 
+                           symboles = true) {
+    const minuscules = 'abcdefghijklmnopqrstuvwxyz';
+    const maj = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const nums = '0123456789';
+    const sym = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    
+    let caracteres = minuscules;
+    if (majuscules) caracteres += maj;
+    if (chiffres) caracteres += nums;
+    if (symboles) caracteres += sym;
+    
+    let mdp = '';
+    for (let i = 0; i < longueur; i++) {
+        mdp += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    
+    // Mélange de Fisher-Yates
+    return mdp.split('').sort(() => Math.random() - 0.5).join('');
+}
+
+// Test
+genererMotDePasse(16, true, true, true);</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Exercice 2 : Débouncing de Recherche</h4>
+                <p><strong>Énoncé</strong> : Créez une fonction de debounce pour limiter les appels API lors de la saisie.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Closure avec timer
+                        2. Clear timeout à chaque appel
+                        3. Nouvelle exécution après délai
+                    </p>
+                    
+                    <pre><code>function debounce(fn, delai = 300) {
+    let timer;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delai);
+    };
+}
+
+// Utilisation
+const rechercheAPI = debounce(function(terme) {
+    console.log('Recherche:', terme);
+    // appel API réel ici
+}, 500);
+
+document.getElementById('search').addEventListener('input', (e) => {
+    rechercheAPI(e.target.value);
+});</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Exercice 3 : Pipeline de Transformations</h4>
+                <p><strong>Énoncé</strong> : Créez une fonction pipe qui enchaîne des transformations sur une valeur.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Fonction prenant fonctions en paramètres
+                        2. Reduce pour appliquer séquentiellement
+                        3. Retour fonction finale
+                    </p>
+                    
+                    <pre><code>function pipe(...fonctions) {
+    return function(valeurInitiale) {
+        return fonctions.reduce((valeur, fn) => fn(valeur), valeurInitiale);
+    };
+}
+
+// Exemple d'utilisation
+const traiterTexte = pipe(
+    str => str.trim(),
+    str => str.toLowerCase(),
+    str => str.replace(/\s+/g, '-'),
+    str => str + '-traite'
+);
+
+traiterTexte('  Bonjour le Monde  '); 
+// "bonjour-le-monde-traite"</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Module 3 - Les Fonctions en JavaScript</p>
+        <p><a href="index.html" style="color: white;">Retour à l'accueil</a></p>
+    </footer>
+</body>
+</html>

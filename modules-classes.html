@@ -1,0 +1,913 @@
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4. Modules, Classes et Programmation Fonctionnelle</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #f8f9fa;
+            --text: #333;
+            --code-bg: #f4f4f4;
+            --border: #ddd;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #fff;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        nav li {
+            margin: 0 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #1a73e8;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .example, .exercise {
+            background-color: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .example h4, .exercise h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .solution {
+            background-color: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            margin-top: 1rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Module 4 : Modules, Classes et Programmation Fonctionnelle</h1>
+        <p>Architecture modulaire et paradigmes avancés</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="dom.html">1. Le DOM</a></li>
+            <li><a href="evenements.html">2. Les Événements</a></li>
+            <li><a href="fonctions.html">3. Les Fonctions</a></li>
+            <li><a href="modules-classes.html" class="active">4. Modules & Classes</a></li>
+            <li><a href="nodejs.html">5. Node.js</a></li>
+            <li><a href="react.html">6. React</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>1. ES6 Modules</h2>
+            <p>Système de modules natif pour organiser le code en fichiers réutilisables.</p>
+            
+            <h3>Export</h3>
+            <pre><code>// math.js
+export function addition(a, b) {
+    return a + b;
+}
+
+export const PI = 3.14159;
+
+const interne = 'privé';
+export default interne; // export par défaut</code></pre>
+            
+            <h3>Import</h3>
+            <pre><code>// main.js
+import valeurDefaut from './math.js';
+import { addition, PI } from './math.js';
+import * as math from './math.js';
+
+console.log(addition(2, 3));
+console.log(math.PI);</code></pre>
+            
+            <h3>Attributs HTML</h3>
+            <pre><code>&lt;script type="module" src="main.js"&gt;&lt;/script&gt;</code></pre>
+        </section>
+
+        <section>
+            <h2>2. Classes ES6</h2>
+            <p>Syntaxe sucrée pour la programmation orientée objet basée sur les prototypes.</p>
+            
+            <h3>Définition de Classe</h3>
+            <pre><code>class Personne {
+    constructor(nom, age) {
+        this.nom = nom;
+        this.age = age;
+    }
+    
+    saluer() {
+        return `Bonjour, je m'appelle ${this.nom}`;
+    }
+    
+    static info() {
+        return 'Classe Personne';
+    }
+}</code></pre>
+            
+            <h3>Héritage</h3>
+            <pre><code>class Employe extends Personne {
+    constructor(nom, age, poste) {
+        super(nom, age);
+        this.poste = poste;
+    }
+    
+    travailler() {
+        return `${this.nom} travaille comme ${this.poste}`;
+    }
+}</code></pre>
+            
+            <h3>Getters/Setters</h3>
+            <pre><code>class Cercle {
+    constructor(rayon) {
+        this._rayon = rayon;
+    }
+    
+    get rayon() { return this._rayon; }
+    set rayon(r) { 
+        if (r > 0) this._rayon = r; 
+    }
+    
+    get aire() { 
+        return Math.PI * this._rayon ** 2; 
+    }
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>3. Programmation Fonctionnelle</h2>
+            <p>Paradigme favorisant l'immutabilité, les fonctions pures et la composition.</p>
+            
+            <h3>Fonctions Pures</h3>
+            <p>Même entrée → même sortie, sans effets de bord.</p>
+            <pre><code>// Pure
+const carre = x => x * x;
+
+// Impure
+let total = 0;
+const ajouter = x => total += x;</code></pre>
+            
+            <h3>Immutabilité</h3>
+            <pre><code>const personne = { nom: 'Marie', age: 30 };
+const personnePlusAgee = { ...personne, age: personne.age + 1 };</code></pre>
+            
+            <h3>Composition de Fonctions</h3>
+            <pre><code>const compose = (...fns) => x => fns.reduceRight((acc, fn) => fn(acc), x);
+const pipe = (...fns) => x => fns.reduce((acc, fn) => fn(acc), x);
+
+const crier = str => str.toUpperCase();
+const exclaimer = str => str + '!!!';
+const epeler = str => str.split('').join('-');
+
+const traitement = pipe(crier, exclaimer, epeler);
+traitement('bonjour'); // "B-O-N-J-O-U-R-!!!"</code></pre>
+            
+            <h3>Currying</h3>
+            <pre><code>const curry = (fn, ...args) => 
+    args.length >= fn.length 
+        ? fn(...args) 
+        : (...more) => curry(fn, ...args, ...more);
+
+const multiplier = (a, b, c) => a * b * c;
+const curryMult = curry(multiplier);
+curryMult(2)(3)(4); // 24</code></pre>
+        </section>
+
+        <section>
+            <h2>4. Design Patterns Fonctionnels</h2>
+            
+            <h3>Factory</h3>
+            <pre><code>const creerUtilisateur = (type) => {
+    const comportements = {
+        admin: { droits: 'tous', dashboard: 'admin' },
+        utilisateur: { droits: 'lecture', dashboard: 'standard' },
+        invite: { droits: 'aucun', dashboard: 'limité' }
+    };
+    return { ...comportements[type], type };
+};</code></pre>
+            
+            <h3>Monad (Option/Result)</h3>
+            <pre><code>const Option = value => ({
+    map: fn => value === null || value === undefined ? Option(null) : Option(fn(value)),
+    getOrElse: defaut => value === null || value === undefined ? defaut : value,
+    flatMap: fn => value === null || value === undefined ? Option(null) : fn(value)
+});
+
+Option(5).map(x => x * 2).getOrElse(0); // 10
+Option(null).map(x => x * 2).getOrElse(0); // 0</code></pre>
+        </section>
+
+        <section>
+            <h2>Exemples Complets</h2>
+            
+            <div class="example">
+                <h4>Exemple 1 : Système de Gestion d'Utilisateurs Modulaire</h4>
+                <p><strong>Problème</strong> : Créer un système modulaire avec authentification, profils et permissions.</p>
+                <p><strong>Logique</strong> :
+                    1. Modules séparés (auth, profil, permissions)
+                    2. Classes avec héritage
+                    3. Composition fonctionnelle
+                    4. Interface unifiée
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Gestion Utilisateurs&lt;/title&gt;
+    &lt;style&gt;
+        .app { max-width: 800px; margin: 20px auto; font-family: Arial; }
+        .user-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .admin { border-color: #28a745; }
+        .actions { margin-top: 10px; }
+        button { margin-right: 5px; padding: 5px 10px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="app" id="app"&gt;&lt;/div&gt;
+
+    &lt;script type="module"&gt;
+        // auth.js
+        class Authentification {
+            constructor() {
+                this.utilisateurs = new Map();
+                this.connecte = null;
+            }
+            
+            inscrire(email, mdp, role = 'utilisateur') {
+                if (this.utilisateurs.has(email)) return false;
+                this.utilisateurs.set(email, { mdp, role, connecte: false });
+                return true;
+            }
+            
+            connecter(email, mdp) {
+                const user = this.utilisateurs.get(email);
+                if (user && user.mdp === mdp) {
+                    user.connecte = true;
+                    this.connecte = email;
+                    return true;
+                }
+                return false;
+            }
+            
+            deconnecter() {
+                if (this.connecte) {
+                    this.utilisateurs.get(this.connecte).connecte = false;
+                    this.connecte = null;
+                }
+            }
+            
+            estConnecte() {
+                return this.connecte !== null;
+            }
+            
+            getRole() {
+                return this.connecte ? this.utilisateurs.get(this.connecte).role : null;
+            }
+        }
+
+        // profil.js
+        class Profil {
+            constructor(auth) {
+                this.auth = auth;
+                this.profils = new Map();
+            }
+            
+            creer(email, donnees) {
+                this.profils.set(email, { ...donnees, email });
+            }
+            
+            obtenir(email) {
+                return this.profils.get(email) || null;
+            }
+            
+            mettreAJour(email, donnees) {
+                if (this.profils.has(email)) {
+                    this.profils.set(email, { ...this.profils.get(email), ...donnees });
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // permissions.js
+        const Permissions = (role) => {
+            const droits = {
+                admin: ['lire', 'ecrire', 'supprimer', 'gerer'],
+                moderateur: ['lire', 'ecrire', 'moderer'],
+                utilisateur: ['lire', 'ecrire'],
+                invite: ['lire']
+            };
+            
+            const permissions = droits[role] || droits.invite;
+            
+            return {
+                peut: action => permissions.includes(action),
+                liste: () => [...permissions]
+            };
+        };
+
+        // app.js
+        const auth = new Authentification();
+        const profil = new Profil(auth);
+
+        // Données initiales
+        auth.inscrire('admin@exemple.com', 'admin123', 'admin');
+        auth.inscrire('user@exemple.com', 'user123', 'utilisateur');
+        profil.creer('admin@exemple.com', { nom: 'Admin', prenom: 'Super' });
+        profil.creer('user@exemple.com', { nom: 'Dupont', prenom: 'Jean' });
+
+        // Interface
+        function afficherConnexion() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                &lt;h2&gt;Connexion&lt;/h2&gt;
+                &lt;input type="email" id="email" placeholder="Email" value="admin@exemple.com"&gt;
+                &lt;input type="password" id="mdp" placeholder="Mot de passe" value="admin123"&gt;
+                &lt;button id="login"&gt;Se connecter&lt;/button&gt;
+            `;
+            
+            document.getElementById('login').onclick = () => {
+                const email = document.getElementById('email').value;
+                const mdp = document.getElementById('mdp').value;
+                if (auth.connecter(email, mdp)) {
+                    afficherDashboard();
+                } else {
+                    alert('Identifiants incorrects');
+                }
+            };
+        }
+
+        function afficherDashboard() {
+            const email = auth.connecte;
+            const userProfil = profil.obtenir(email);
+            const permissions = Permissions(auth.getRole());
+            
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                &lt;div class="user-card ${auth.getRole()}"&gt;
+                    &lt;h3&gt;Bienvenue ${userProfil.prenom} ${userProfil.nom}&lt;/h3&gt;
+                    &lt;p&gt;Rôle: ${auth.getRole()}&lt;/p&gt;
+                    &lt;p&gt;Permissions: ${permissions.liste().join(', ')}&lt;/p&gt;
+                    &lt;div class="actions"&gt;
+                        &lt;button id="deconnect"&gt;Déconnexion&lt;/button&gt;
+                        ${permissions.peut('gerer') ? '&lt;button id="admin"&gt;Admin&lt;/button&gt;' : ''}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            `;
+            
+            document.getElementById('deconnect').onclick = () => {
+                auth.deconnecter();
+                afficherConnexion();
+            };
+        }
+
+        // Démarrage
+        afficherConnexion();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Système de connexion modulaire. Dashboard affichant profil et permissions selon rôle. Admin voit bouton supplémentaire.</p>
+            </div>
+
+            <div class="example">
+                <h4>Exemple 2 : Bibliothèque de Composants Fonctionnels</h4>
+                <p><strong>Problème</strong> : Créer une bibliothèque de composants UI réutilisables avec composition.</p>
+                <p><strong>Logique</strong> :
+                    1. Fonctions pures retournant HTML
+                    2. Composition via higher-order components
+                    3. Gestion d'état locale
+                    4. Rendu dynamique
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Composants Fonctionnels&lt;/title&gt;
+    &lt;style&gt;
+        .card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn { padding: 8px 12px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #1a73e8; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 500px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="app"&gt;&lt;/div&gt;
+
+    &lt;script type="module"&gt;
+        // Composants de base
+        const Button = ({ label, onClick, type = 'primary' }) => 
+            `&lt;button class="btn btn-${type}" onclick="${onClick}"&gt;${label}&lt;/button&gt;`;
+
+        const Card = ({ titre, contenu, actions = '' }) => 
+            `&lt;div class="card"&gt;
+                &lt;h3&gt;${titre}&lt;/h3&gt;
+                &lt;p&gt;${contenu}&lt;/p&gt;
+                &lt;div&gt;${actions}&lt;/div&gt;
+            &lt;/div&gt;`;
+
+        const Modal = ({ titre, contenu, onClose }) => 
+            `&lt;div class="modal" onclick="if(event.target===this) ${onClose}()"&gt;
+                &lt;div class="modal-content"&gt;
+                    &lt;h3&gt;${titre}&lt;/h3&gt;
+                    &lt;p&gt;${contenu}&lt;/p&gt;
+                    &lt;button class="btn btn-danger" onclick="${onClose}"&gt;Fermer&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;`;
+
+        // Higher-Order Component
+        const withState = (initial) => {
+            let state = initial;
+            return {
+                get: () => state,
+                set: (newState) => { state = typeof newState === 'function' ? newState(state) : newState; },
+                reset: () => { state = initial; }
+            };
+        };
+
+        const withToggle = (Component) => {
+            return (props) => {
+                const toggle = withState(false);
+                const isOpen = toggle.get();
+                const onToggle = () => toggle.set(!isOpen);
+                
+                return Component({ 
+                    ...props, 
+                    isOpen, 
+                    onToggle,
+                    toggle 
+                });
+            };
+        };
+
+        // Composant avec état
+        const TodoList = withToggle(({ items, isOpen, onToggle }) => {
+            const supprimer = (index) => {
+                items.splice(index, 1);
+                render();
+            };
+            
+            const actions = items.map((item, i) => 
+                Button({ 
+                    label: 'Supprimer', 
+                    onClick: `supprimer(${i})`,
+                    type: 'danger'
+                })
+            ).join('');
+            
+            return Card({
+                titre: `Tâches (${items.length}) ${Button({ label: isOpen ? '−' : '+', onClick: 'onToggle()' })}`,
+                contenu: isOpen ? 
+                    items.map((item, i) => 
+                        `&lt;div&gt;${item} ${Button({ label: '×', onClick: `supprimer(${i})`, type: 'danger' })}&lt;/div&gt;
+                    `).join('') : 
+                    'Cliquez pour voir les tâches',
+                actions
+            });
+        });
+
+        // Application
+        let todos = ['Apprendre JS', 'Créer composants', 'Tester'];
+        let modalOpen = false;
+
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                &lt;h1&gt;Bibliothèque de Composants&lt;/h1&gt;
+                ${TodoList({ items: todos })}
+                
+                ${Button({ 
+                    label: 'Ajouter tâche', 
+                    onClick: 'ajouterTache()', 
+                    type: 'primary' 
+                })}
+                
+                ${modalOpen ? Modal({ 
+                    titre: 'Confirmation', 
+                    contenu: 'Voulez-vous vraiment réinitialiser ?', 
+                    onClose: 'fermerModal()' 
+                }) : ''}
+            `;
+        }
+
+        function ajouterTache() {
+            const tache = prompt('Nouvelle tâche:');
+            if (tache) {
+                todos.push(tache);
+                render();
+            }
+        }
+
+        window.supprimer = (i) => {
+            todos.splice(i, 1);
+            render();
+        };
+
+        window.onToggle = () => render();
+        window.fermerModal = () => { modalOpen = false; render(); };
+        
+        window.reinitialiser = () => {
+            modalOpen = true;
+            render();
+        };
+
+        // Bouton réinitialisation
+        setTimeout(() => {
+            const extra = Button({ label: 'Réinitialiser', onClick: 'reinitialiser()', type: 'danger' });
+            document.getElementById('app').insertAdjacentHTML('beforeend', extra);
+        }, 100);
+
+        render();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Bibliothèque de composants réutilisables. Todo list pliable. Boutons d'action. Modal de confirmation. Tout en fonctions pures.</p>
+            </div>
+
+            <div class="example">
+                <h4>Exemple 3 : Application de Validation de Formulaires Fonctionnelle</h4>
+                <p><strong>Problème</strong> : Créer un validateur de formulaires réutilisable avec règles composables.</p>
+                <p><strong>Logique</strong> :
+                    1. Validateurs atomiques
+                    2. Composition avec pipe
+                    3. État immutable
+                    4. Rendu déclaratif
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Validateur Fonctionnel&lt;/title&gt;
+    &lt;style&gt;
+        .form-validator { max-width: 500px; margin: 30px auto; font-family: Arial; }
+        .field { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .error { color: #dc3545; font-size: 0.9em; margin-top: 5px; }
+        .valid { border-color: #28a745; }
+        .invalid { border-color: #dc3545; }
+        button { background: #1a73e8; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="form-validator" id="app"&gt;&lt;/div&gt;
+
+    &lt;script type="module"&gt;
+        // Validateurs atomiques
+        const requis = (valeur) => 
+            valeur.trim() !== '' ? { valide: true } : { valide: false, erreur: 'Champ requis' };
+
+        const email = (valeur) => 
+            /^\S+@\S+\.\S+$/.test(valeur) ? { valide: true } : { valide: false, erreur: 'Email invalide' };
+
+        const longueurMin = (min) => (valeur) => 
+            valeur.length >= min ? { valide: true } : { valide: false, erreur: `Minimum ${min} caractères` };
+
+        const ageValide = (valeur) => {
+            const age = parseInt(valeur);
+            return age >= 18 && age <= 120 ? { valide: true } : { valide: false, erreur: 'Âge entre 18 et 120' };
+        };
+
+        // Composition
+        const compose = (...validateurs) => (valeur) => {
+            for (const v of validateurs) {
+                const resultat = v(valeur);
+                if (!resultat.valide) return resultat;
+            }
+            return { valide: true };
+        };
+
+        const validerEmail = compose(requis, email);
+        const validerNom = compose(requis, longueurMin(2));
+        const validerAge = compose(requis, ageValide);
+
+        // État immutable
+        const creerEtat = () => ({
+            valeurs: { nom: '', email: '', age: '' },
+            erreurs: { nom: '', email: '', age: '' },
+            touche: { nom: false, email: false, age: false }
+        });
+
+        let etat = creerEtat();
+
+        // Rendu déclaratif
+        const Champ = ({ id, label, type = 'text', valeur, onChange, erreur, touche }) => {
+            const classe = touche && erreur ? 'invalid' : touche && !erreur ? 'valid' : '';
+            return `
+                &lt;div class="field"&gt;
+                    &lt;label for="${id}"&gt;${label}&lt;/label&gt;
+                    &lt;input type="${type}" id="${id}" value="${valeur}" onchange="${onChange}" class="${classe}"&gt;
+                    ${touche && erreur ? `&lt;div class="error"&gt;${erreur}&lt;/div&gt;` : ''}
+                &lt;/div&gt;
+            `;
+        };
+
+        function render() {
+            const { valeurs, erreurs, touche } = etat;
+            const formulaireValide = Object.values(erreurs).every(e => !e) && 
+                                   Object.values(touche).every(t => t);
+
+            document.getElementById('app').innerHTML = `
+                &lt;h2&gt;Inscription&lt;/h2&gt;
+                &lt;form onsubmit="soumettre(event)"&gt;
+                    ${Champ({
+                        id: 'nom',
+                        label: 'Nom',
+                        valeur: valeurs.nom,
+                        onChange: 'gererChangement("nom", event.target.value)',
+                        erreur: erreurs.nom,
+                        touche: touche.nom
+                    })}
+                    ${Champ({
+                        id: 'email',
+                        label: 'Email',
+                        type: 'email',
+                        valeur: valeurs.email,
+                        onChange: 'gererChangement("email", event.target.value)',
+                        erreur: erreurs.email,
+                        touche: touche.email
+                    })}
+                    ${Champ({
+                        id: 'age',
+                        label: 'Âge',
+                        type: 'number',
+                        valeur: valeurs.age,
+                        onChange: 'gererChangement("age", event.target.value)',
+                        erreur: erreurs.age,
+                        touche: touche.age
+                    })}
+                    &lt;button type="submit" ${formulaireValide ? '' : 'disabled'}&gt;S'inscrire&lt;/button&gt;
+                &lt;/form&gt;
+            `;
+        }
+
+        window.gererChangement = (champ, valeur) => {
+            etat = {
+                ...etat,
+                valeurs: { ...etat.valeurs, [champ]: valeur },
+                touche: { ...etat.touche, [champ]: true }
+            };
+
+            // Validation
+            const validateurs = { nom: validerNom, email: validerEmail, age: validerAge };
+            const resultat = validateurs[champ](valeur);
+            etat.erreurs[champ] = resultat.valide ? '' : resultat.erreur;
+
+            render();
+        };
+
+        window.soumettre = (e) => {
+            e.preventDefault();
+            if (Object.values(etat.erreurs).every(e => !e)) {
+                alert('Inscription réussie !');
+                etat = creerEtat();
+                render();
+            }
+        };
+
+        render();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Formulaire avec validation en temps réel. Validateurs composables. État immutable. Bouton activé seulement si tout valide.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Mini-Exercices</h2>
+            
+            <div class="exercise">
+                <h4>Exercice 1 : Module de Formatage</h4>
+                <p><strong>Énoncé</strong> : Créez un module formatage.js avec fonctions d'export pour dates, nombres et textes.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Fonctions utilitaires
+                        2. Export nommé
+                        3. Utilisation dans page principale
+                    </p>
+                    
+                    <pre><code>// formatage.js
+export const formaterDate = (date) => {
+    return new Intl.DateTimeFormat('fr-FR').format(date);
+};
+
+export const formaterNombre = (nombre, decimales = 2) => {
+    return new Intl.NumberFormat('fr-FR', {
+        minimumFractionDigits: decimales,
+        maximumFractionDigits: decimales
+    }).format(nombre);
+};
+
+export const capitaliser = (texte) => {
+    return texte.charAt(0).toUpperCase() + texte.slice(1).toLowerCase();
+};
+
+// main.html
+&lt;script type="module"&gt;
+    import { formaterDate, formaterNombre, capitaliser } from './formatage.js';
+    
+    console.log(formaterDate(new Date()));
+    console.log(formaterNombre(1234.567));
+    console.log(capitaliser('bonjour'));
+&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Exercice 2 : Classe Panier Immutable</h4>
+                <p><strong>Énoncé</strong> : Créez une classe Panier avec méthodes ajout/suppression retournant nouvelle instance.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. État interne items
+                        2. Méthodes retournant nouveau panier
+                        3. Méthode total
+                    </p>
+                    
+                    <pre><code>class Panier {
+    constructor(items = []) {
+        this.items = [...items];
+    }
+    
+    ajouter(produit, prix) {
+        return new Panier([...this.items, { produit, prix }]);
+    }
+    
+    supprimer(index) {
+        return new Panier(this.items.filter((_, i) => i !== index));
+    }
+    
+    total() {
+        return this.items.reduce((sum, item) => sum + item.prix, 0);
+    }
+    
+    vider() {
+        return new Panier();
+    }
+}
+
+// Utilisation
+let panier = new Panier();
+panier = panier.ajouter('Livre', 20);
+panier = panier.ajouter('Stylo', 2);
+console.log(panier.total()); // 22</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Exercice 3 : Transducteur de Données</h4>
+                <p><strong>Énoncé</strong> : Créez un transducteur composant map, filter et reduce sur un tableau.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Transducteurs atomiques
+                        2. Composition
+                        3. Réduction finale
+                    </p>
+                    
+                    <pre><code>const mapTransducer = (fn) => (reducer) => (acc, valeur) => 
+    reducer(acc, fn(valeur));
+
+const filterTransducer = (predicat) => (reducer) => (acc, valeur) => 
+    predicat(valeur) ? reducer(acc, valeur) : acc;
+
+const compose = (...transducers) => transducers.reduce((a, b) => (...args) => a(b(...args)));
+
+const transduce = (transducer, reducer, initial, data) => 
+    data.reduce(transducer(reducer), initial);
+
+// Utilisation
+const traitement = compose(
+    filterTransducer(n => n % 2 === 0),
+    mapTransducer(n => n * n)
+);
+
+const resultat = transduce(traitement, (acc, v) => [...acc, v], [], [1,2,3,4,5,6]);
+console.log(resultat); // [4, 16, 36]</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Module 4 - Modules, Classes et Programmation Fonctionnelle</p>
+        <p><a href="index.html" style="color: white;">Retour à l'accueil</a></p>
+    </footer>
+</body>
+</html>

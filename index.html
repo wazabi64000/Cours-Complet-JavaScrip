@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours Complet JavaScript - Développement Web</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #f8f9fa;
+            --text: #333;
+            --code-bg: #f4f4f4;
+            --border: #ddd;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #fff;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        nav li {
+            margin: 0 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #1a73e8;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .example, .exercise {
+            background-color: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .example h4, .exercise h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .solution {
+            background-color: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            margin-top: 1rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        .progression {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .step {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 0.5rem 0;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cours Complet de Développement Web JavaScript</h1>
+        <p>Parcours structuré du DOM à React</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="dom.html">1. Le DOM</a></li>
+            <li><a href="evenements.html">2. Les Événements</a></li>
+            <li><a href="fonctions.html">3. Les Fonctions</a></li>
+            <li><a href="modules-classes.html">4. Modules & Classes</a></li>
+            <li><a href="nodejs.html">5. Node.js</a></li>
+            <li><a href="react.html">6. React</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Introduction Générale au Parcours</h2>
+            <p>Ce cours complet de développement web JavaScript propose une progression pédagogique structurée en six modules interconnectés, couvrant les fondements du langage jusqu'aux technologies modernes de développement frontend et backend.</p>
+            
+            <h3>Technologies Abordées</h3>
+            <ul>
+                <li><strong>JavaScript ES6+</strong> : Syntaxe moderne, manipulation du DOM, gestion des événements</li>
+                <li><strong>DOM API</strong> : Sélection, modification et création d'éléments HTML</li>
+                <li><strong>Programmation modulaire</strong> : ES6 modules, classes, programmation fonctionnelle</li>
+                <li><strong>Node.js</strong> : Environnement d'exécution serveur, système de fichiers, modules natifs</li>
+                <li><strong>React</strong> : Composants fonctionnels, état, cycle de vie, JSX</li>
+            </ul>
+
+            <h3>Compétences Visées</h3>
+            <ul>
+                <li>Maîtriser la manipulation du DOM et la gestion d'événements interactifs</li>
+                <li>Concevoir des architectures JavaScript modulaires et maintenables</li>
+                <li>Développer des applications serveur avec Node.js</li>
+                <li>Créer des interfaces utilisateur réactives avec React</li>
+                <li>Appliquer les bonnes pratiques de développement JavaScript moderne</li>
+            </ul>
+
+            <h3>Organisation du Parcours</h3>
+            <div class="progression">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Le DOM</h4>
+                    <p>Manipulation de la structure HTML via JavaScript</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Les Événements</h4>
+                    <p>Gestion des interactions utilisateur</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Les Fonctions</h4>
+                    <p>Fonctions avancées et paradigmes</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Modules & Classes</h4>
+                    <p>Architecture modulaire et POO</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h4>Node.js</h4>
+                    <p>Développement backend</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h4>React</h4>
+                    <p>Interfaces réactives</p>
+                </div>
+            </div>
+
+            <h3>Logique de Progression</h3>
+            <p>Le parcours suit une logique ascendante : des bases de l'interaction client (DOM, événements) vers les concepts avancés de structuration du code (fonctions, modules, classes), puis vers les environnements d'exécution (Node.js) et enfin vers les frameworks modernes (React). Chaque module s'appuie sur les acquis précédents pour une progression cohérente et efficace.</p>
+        </section>
+
+        <section>
+            <h2>Commencer le Parcours</h2>
+            <p>Naviguez à travers les six modules via le menu en haut de page. Chaque module contient :</p>
+            <ul>
+                <li>Un cours théorique détaillé avec schémas et exemples commentés</li>
+                <li>Trois exemples complets analysés (problème, logique, code, résultat)</li>
+                <li>Trois exercices pratiques avec corrections détaillées</li>
+            </ul>
+            <p><strong>Conseil pédagogique</strong> : Suivez l'ordre proposé pour une assimilation optimale des concepts.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Cours Complet JavaScript - Développement Web Professionnel</p>
+        <p>© 2025 - Tous droits NoN réservés</p>
+    </footer>
+</body>
+</html>

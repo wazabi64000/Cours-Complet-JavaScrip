@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1. Le DOM en JavaScript</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #f8f9fa;
+            --text: #333;
+            --code-bg: #f4f4f4;
+            --border: #ddd;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #fff;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        nav li {
+            margin: 0 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #1a73e8;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .example, .exercise {
+            background-color: white;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .example h4, .exercise h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .solution {
+            background-color: #e8f5e8;
+            border-left: 4px solid #4caf50;
+            margin-top: 1rem;
+        }
+        .demo {
+            background-color: #fff;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Module 1 : Le DOM en JavaScript</h1>
+        <p>Manipulation de la structure et du contenu HTML</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="dom.html" class="active">1. Le DOM</a></li>
+            <li><a href="evenements.html">2. Les Événements</a></li>
+            <li><a href="fonctions.html">3. Les Fonctions</a></li>
+            <li><a href="modules-classes.html">4. Modules & Classes</a></li>
+            <li><a href="nodejs.html">5. Node.js</a></li>
+            <li><a href="react.html">6. React</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>1. Introduction au DOM</h2>
+            <p>Le Document Object Model (DOM) est une interface de programmation qui représente la structure d'un document HTML sous forme d'arbre d'objets. JavaScript permet d'accéder, de modifier et de manipuler dynamiquement cette structure.</p>
+            
+            <h3>Structure du DOM</h3>
+            <p>Le DOM organise le document en nœuds :</p>
+            <ul>
+                <li><strong>Document</strong> : Nœud racine</li>
+                <li><strong>Éléments HTML</strong> : Balises (&lt;div&gt;, &lt;p&gt;, etc.)</li>
+                <li><strong>Attributs</strong> : Propriétés des éléments (id, class, src)</li>
+                <li><strong>Texte</strong> : Contenu textuel</li>
+            </ul>
+            
+            <pre><code>// Exemple de structure DOM
+document
+└── html
+    ├── head
+    │   └── title
+    │       └── "Ma Page"
+    └── body
+        ├── h1
+        │   └── "Titre"
+        └── p
+            └── "Paragraphe"
+</code></pre>
+        </section>
+
+        <section>
+            <h2>2. Sélection d'Éléments</h2>
+            
+            <h3>Méthodes Principales</h3>
+            <ul>
+                <li><code>document.getElementById('id')</code> : Sélection par ID unique</li>
+                <li><code>document.querySelector('sélecteur')</code> : Premier élément correspondant</li>
+                <li><code>document.querySelectorAll('sélecteur')</code> : Tous les éléments (NodeList)</li>
+                <li><code>document.getElementsByClassName('classe')</code> : HTMLCollection par classe</li>
+                <li><code>document.getElementsByTagName('balise')</code> : HTMLCollection par balise</li>
+            </ul>
+            
+            <pre><code>// Sélection d'éléments
+const titre = document.getElementById('main-title');
+const paragraphes = document.querySelectorAll('p');
+const items = document.getElementsByClassName('item');</code></pre>
+        </section>
+
+        <section>
+            <h2>3. Manipulation du Contenu</h2>
+            
+            <h3>Propriétés de Contenu</h3>
+            <ul>
+                <li><code>element.innerHTML</code> : Contenu HTML (inclut balises)</li>
+                <li><code>element.textContent</code> : Texte brut (sécurisé)</li>
+                <li><code>element.innerText</code> : Texte affiché (prend en compte CSS)</li>
+            </ul>
+            
+            <h3>Attributs</h3>
+            <ul>
+                <li><code>element.getAttribute('nom')</code> : Lire un attribut</li>
+                <li><code>element.setAttribute('nom', 'valeur')</code> : Définir un attribut</li>
+                <li><code>element.removeAttribute('nom')</code> : Supprimer un attribut</li>
+            </ul>
+            
+            <pre><code>// Manipulation
+const div = document.querySelector('#container');
+div.innerHTML = '&lt;h2&gt;Nouveau titre&lt;/h2&gt;';
+div.textContent = 'Texte simple';
+div.setAttribute('data-id', '123');</code></pre>
+        </section>
+
+        <section>
+            <h2>4. Création et Modification d'Éléments</h2>
+            
+            <h3>Création</h3>
+            <ul>
+                <li><code>document.createElement('balise')</code> : Créer un élément</li>
+                <li><code>document.createTextNode('texte')</code> : Créer un nœud texte</li>
+            </ul>
+            
+            <h3>Insertion</h3>
+            <ul>
+                <li><code>parent.appendChild(element)</code> : Ajouter à la fin</li>
+                <li><code>parent.insertBefore(nouveau, référence)</code> : Insérer avant</li>
+                <li><code>element.insertAdjacentHTML(position, html)</code> : Position relative</li>
+            </ul>
+            
+            <h3>Suppression</h3>
+            <ul>
+                <li><code>element.remove()</code> : Supprimer l'élément</li>
+                <li><code>parent.removeChild(enfant)</code> : Supprimer un enfant</li>
+            </ul>
+            
+            <pre><code>// Création et insertion
+const nouvelleDiv = document.createElement('div');
+nouvelleDiv.textContent = 'Nouveau contenu';
+nouvelleDiv.className = 'highlight';
+
+document.body.appendChild(nouvelleDiv);
+
+// Insertion adjacente
+element.insertAdjacentHTML('beforeend', '&lt;p&gt;Ajouté&lt;/p&gt;');</code></pre>
+        </section>
+
+        <section>
+            <h2>5. Navigation dans l'Arbre DOM</h2>
+            
+            <h3>Propriétés de Navigation</h3>
+            <ul>
+                <li><code>element.parentNode</code> : Parent direct</li>
+                <li><code>element.children</code> : Enfants éléments (HTMLCollection)</li>
+                <li><code>element.firstElementChild</code> / <code>lastElementChild</code></li>
+                <li><code>element.nextElementSibling</code> / <code>previousElementSibling</code></li>
+            </ul>
+            
+            <pre><code>// Navigation
+const liste = document.querySelector('ul');
+const premierItem = liste.firstElementChild;
+const parent = premierItem.parentNode;</code></pre>
+        </section>
+
+        <section>
+            <h2>Exemples Complets</h2>
+            
+            <div class="example">
+                <h4>Exemple 1 : Todo List Dynamique</h4>
+                <p><strong>Problème</strong> : Créer une liste de tâches où l'utilisateur peut ajouter et supprimer des éléments dynamiquement.</p>
+                <p><strong>Logique</strong> :
+                    1. Sélectionner le formulaire et la liste
+                    2. Créer une fonction pour ajouter une tâche
+                    3. Créer une fonction pour supprimer une tâche
+                    4. Gérer la validation du formulaire
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Todo List&lt;/title&gt;
+    &lt;style&gt;
+        .delete-btn { color: red; cursor: pointer; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Ma Liste de Tâches&lt;/h1&gt;
+    
+    &lt;form id="todo-form"&gt;
+        &lt;input type="text" id="todo-input" placeholder="Nouvelle tâche" required&gt;
+        &lt;button type="submit"&gt;Ajouter&lt;/button&gt;
+    &lt;/form&gt;
+    
+    &lt;ul id="todo-list"&gt;&lt;/ul&gt;
+
+    &lt;script&gt;
+        // Sélection des éléments
+        const form = document.getElementById('todo-form');
+        const input = document.getElementById('todo-input');
+        const liste = document.getElementById('todo-list');
+
+        // Fonction d'ajout
+        function ajouterTache(texte) {
+            // Création des éléments
+            const li = document.createElement('li');
+            const span = document.createElement('span');
+            const bouton = document.createElement('span');
+            
+            // Configuration
+            span.textContent = texte;
+            bouton.textContent = ' ✕';
+            bouton.className = 'delete-btn';
+            
+            // Gestion suppression
+            bouton.addEventListener('click', () => {
+                li.remove();
+            });
+            
+            // Assemblage
+            li.appendChild(span);
+            li.appendChild(bouton);
+            liste.appendChild(li);
+            
+            // Réinitialisation
+            input.value = '';
+        }
+
+        // Gestion soumission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const texte = input.value.trim();
+            if (texte) {
+                ajouterTache(texte);
+            }
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Une interface fonctionnelle permettant d'ajouter des tâches via le formulaire, chaque tâche affichée avec un bouton de suppression en forme de croix. La suppression est immédiate sans rechargement.</p>
+            </div>
+
+            <div class="example">
+                <h4>Exemple 2 : Galerie d'Images Interactive</h4>
+                <p><strong>Problème</strong> : Créer une galerie où cliquer sur une miniature affiche l'image en grand.</p>
+                <p><strong>Logique</strong> :
+                    1. Créer une structure avec miniatures et zone d'affichage
+                    2. Ajouter un écouteur sur chaque miniature
+                    3. Mettre à jour l'image principale et sa légende
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Galerie Photo&lt;/title&gt;
+    &lt;style&gt;
+        .gallery { display: flex; gap: 10px; margin-top: 20px; }
+        .thumb { width: 100px; height: 100px; object-fit: cover; cursor: pointer; border: 2px solid #ddd; }
+        .thumb:hover { border-color: #1a73e8; }
+        .main-img { max-width: 100%; height: auto; border: 2px solid #ddd; }
+        .caption { text-align: center; margin-top: 10px; font-style: italic; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Ma Galerie Photo&lt;/h1&gt;
+    
+    &lt;div id="main-display"&gt;
+        &lt;img id="main-image" class="main-img" src="" alt=""&gt;
+        &lt;p id="caption" class="caption"&gt;Cliquez sur une miniature&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="gallery" id="thumbnails"&gt;
+        &lt;img class="thumb" src="https://picsum.photos/200/300?random=1" data-title="Photo 1"&gt;
+        &lt;img class="thumb" src="https://picsum.photos/200/300?random=2" data-title="Photo 2"&gt;
+        &lt;img class="thumb" src="https://picsum.photos/200/300?random=3" data-title="Photo 3"&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // Sélection
+        const mainImg = document.getElementById('main-image');
+        const caption = document.getElementById('caption');
+        const thumbs = document.querySelectorAll('.thumb');
+
+        // Fonction d'affichage
+        function afficherImage(src, titre) {
+            mainImg.src = src;
+            caption.textContent = titre;
+        }
+
+        // Écouteurs sur miniatures
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                const src = thumb.src;
+                const titre = thumb.dataset.title;
+                afficherImage(src, titre);
+            });
+        });
+
+        // Image par défaut
+        if (thumbs.length > 0) {
+            afficherImage(thumbs[0].src, thumbs[0].dataset.title);
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Une galerie avec 3 miniatures. Au chargement, la première image s'affiche en grand. Chaque clic sur une miniature met à jour l'image principale et sa légende.</p>
+            </div>
+
+            <div class="example">
+                <h4>Exemple 3 : Formulaire de Contact avec Validation</h4>
+                <p><strong>Problème</strong> : Créer un formulaire avec validation visuelle des champs et affichage des erreurs.</p>
+                <p><strong>Logique</strong> :
+                    1. Créer le formulaire avec champs requis
+                    2. Valider chaque champ à la soumission
+                    3. Afficher les messages d'erreur
+                    4. Réinitialiser les erreurs si correction
+                </p>
+                
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Formulaire Contact&lt;/title&gt;
+    &lt;style&gt;
+        .error { color: red; font-size: 0.9em; display: none; }
+        .invalid { border: 2px solid red; }
+        .field { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Contactez-nous&lt;/h1&gt;
+    
+    &lt;form id="contact-form"&gt;
+        &lt;div class="field"&gt;
+            &lt;label&gt;Nom *&lt;/label&gt;
+            &lt;input type="text" id="nom" required&gt;
+            &lt;p class="error" id="error-nom"&gt;Le nom est requis&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="field"&gt;
+            &lt;label&gt;Email *&lt;/label&gt;
+            &lt;input type="email" id="email" required&gt;
+            &lt;p class="error" id="error-email"&gt;Email invalide&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="field"&gt;
+            &lt;label&gt;Message *&lt;/label&gt;
+            &lt;textarea id="message" required&gt;&lt;/textarea&gt;
+            &lt;p class="error" id="error-message"&gt;Le message est requis&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;button type="submit"&gt;Envoyer&lt;/button&gt;
+    &lt;/form&gt;
+
+    &lt;script&gt;
+        const form = document.getElementById('contact-form');
+        const champs = ['nom', 'email', 'message'];
+
+        // Fonction de validation
+        function validerChamp(id) {
+            const champ = document.getElementById(id);
+            const erreur = document.getElementById('error-' + id);
+            let valide = true;
+
+            if (!champ.value.trim()) {
+                erreur.style.display = 'block';
+                champ.classList.add('invalid');
+                valide = false;
+            } else {
+                erreur.style.display = 'none';
+                champ.classList.remove('invalid');
+                
+                if (id === 'email' && !champ.value.includes('@')) {
+                    erreur.textContent = 'Email doit contenir @';
+                    erreur.style.display = 'block';
+                    champ.classList.add('invalid');
+                    valide = false;
+                }
+            }
+            return valide;
+        }
+
+        // Validation à la saisie
+        champs.forEach(id => {
+            const champ = document.getElementById(id);
+            champ.addEventListener('input', () => validerChamp(id));
+        });
+
+        // Soumission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let toutValide = true;
+
+            champs.forEach(id => {
+                if (!validerChamp(id)) {
+                    toutValide = false;
+                }
+            });
+
+            if (toutValide) {
+                alert('Formulaire envoyé avec succès !');
+                form.reset();
+                champs.forEach(id => {
+                    document.getElementById(id).classList.remove('invalid');
+                });
+            }
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                
+                <p><strong>Résultat attendu</strong> : Formulaire avec validation en temps réel. Bordures rouges et messages d'erreur pour champs vides ou email invalide. Alerte de succès si tout est valide.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Mini-Exercices</h2>
+            
+            <div class="exercise">
+                <h4>Exercice 1 : Compteur de Clics</h4>
+                <p><strong>Énoncé</strong> : Créez un bouton qui affiche le nombre de clics dans un paragraphe adjacent. Le compteur doit persister entre les clics.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Créer structure HTML avec bouton et paragraphe
+                        2. Sélectionner les éléments
+                        3. Initialiser un compteur à 0
+                        4. Incrémenter et mettre à jour le texte à chaque clic
+                    </p>
+                    
+                    <pre><code>&lt;div id="counter"&gt;
+    &lt;button id="btn"&gt;Cliquez-moi&lt;/button&gt;
+    &lt;p&gt;Clics : &lt;span id="count"&gt;0&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+    const bouton = document.getElementById('btn');
+    const compteur = document.getElementById('count');
+    let clics = 0;
+
+    bouton.addEventListener('click', () => {
+        clics++;
+        compteur.textContent = clics;
+    });
+&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Exercice 2 : Liste de Courses</h4>
+                <p><strong>Énoncé</strong> : Créez un champ de saisie et un bouton pour ajouter des articles à une liste de courses. Chaque article doit avoir un bouton "Supprimer".</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Structure avec input, bouton et liste
+                        2. Fonction d'ajout créant li avec texte et bouton
+                        3. Bouton suppression supprime son parent
+                        4. Vider l'input après ajout
+                    </p>
+                    
+                    <pre><code>&lt;input type="text" id="item" placeholder="Article"&gt;
+&lt;button id="add"&gt;Ajouter&lt;/button&gt;
+&lt;ul id="liste"&gt;&lt;/ul&gt;
+
+&lt;script&gt;
+    const input = document.getElementById('item');
+    const bouton = document.getElementById('add');
+    const liste = document.getElementById('liste');
+
+    bouton.addEventListener('click', () => {
+        const texte = input.value.trim();
+        if (texte) {
+            const li = document.createElement('li');
+            const span = document.createElement('span');
+            const suppr = document.createElement('button');
+            
+            span.textContent = texte;
+            suppr.textContent = 'Supprimer';
+            suppr.style.marginLeft = '10px';
+            
+            suppr.addEventListener('click', () => li.remove());
+            
+            li.appendChild(span);
+            li.appendChild(suppr);
+            liste.appendChild(li);
+            
+            input.value = '';
+        }
+    });
+&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+
+            <div class="exercise">
+                <h4>Exercice 3 : Changement de Thème</h4>
+                <p><strong>Énoncé</strong> : Créez un bouton qui alterne entre thème clair et sombre en modifiant les classes CSS du body.</p>
+                
+                <div class="solution">
+                    <p><strong>Démarche</strong> :
+                        1. Définir CSS pour .dark
+                        2. Bouton toggle la classe
+                        3. Mettre à jour le texte du bouton
+                    </p>
+                    
+                    <pre><code>&lt;style&gt;
+    .dark {
+        background-color: #333;
+        color: #fff;
+    }
+&lt;/style&gt;
+
+&lt;button id="theme"&gt;Mode Sombre&lt;/button&gt;
+
+&lt;script&gt;
+    const bouton = document.getElementById('theme');
+    const body = document.body;
+
+    bouton.addEventListener('click', () => {
+        body.classList.toggle('dark');
+        bouton.textContent = body.classList.contains('dark') 
+            ? 'Mode Clair' 
+            : 'Mode Sombre';
+    });
+&lt;/script&gt;</code></pre>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Module 1 - Le DOM en JavaScript</p>
+        <p><a href="index.html" style="color: white;">Retour à l'accueil</a></p>
+    </footer>
+</body>
+</html>

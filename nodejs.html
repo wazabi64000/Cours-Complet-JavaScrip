@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5. Introduction à Node.js — Guide Pas à Pas (Natif)</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #f8f9fa;
+            --text: #333;
+            --code-bg: #f4f4f4;
+            --border: #ddd;
+            --step: #4caf50;
+            --win: #0078d4;
+            --mac: #555;
+            --linux: #e95420;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #fff;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        nav li {
+            margin: 0 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 3rem;
+            padding: 1.5rem;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #1a73e8;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        h3::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .step {
+            background-color: white;
+            border-left: 4px solid var(--step);
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+            position: relative;
+        }
+        .step::before {
+            content: counter(step);
+            counter-increment: step;
+            position: absolute;
+            left: -15px;
+            top: 10px;
+            background: var(--step);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .step h4 {
+            color: var(--step);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .terminal {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .terminal::before {
+            content: "$ ";
+            color: #4caf50;
+        }
+        .os {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .os-card {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            border-radius: 8px;
+            padding: 1.2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+        }
+        .os-card.win { border-left-color: var(--win); }
+        .os-card.mac { border-left-color: var(--mac); }
+        .os-card.linux { border-left-color: var(--linux); }
+        .os-card h4 {
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        .os-card h4::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        .os-card.win h4::before { background: var(--win); }
+        .os-card.mac h4::before { background: var(--mac); }
+        .os-card.linux h4::before { background: var(--linux); }
+        .note {
+            background-color: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.9rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 0.5rem 0;
+            }
+            .os {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Module 5 : Introduction à Node.js</h1>
+        <p>Guide pas à pas — 100 % natif, sans framework</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="dom.html">1. Le DOM</a></li>
+            <li><a href="evenements.html">2. Les Événements</a></li>
+            <li><a href="fonctions.html">3. Les Fonctions</a></li>
+            <li><a href="modules-classes.html">4. Modules & Classes</a></li>
+            <li><a href="nodejs.html" class="active">5. Node.js Natif</a></li>
+            <li><a href="react.html">6. React</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>1. Qu'est-ce que Node.js ?</h2>
+            <p><strong>Node.js</strong> est un environnement qui permet d’exécuter du code JavaScript <strong>en dehors du navigateur</strong>.</p>
+            <p>Il utilise le moteur <code>V8</code> de Chrome et permet de :</p>
+            <ul>
+                <li>Lire/écrire des fichiers</li>
+                <li>Créer un serveur web</li>
+                <li>Communiquer avec une base de données</li>
+                <li>Exécuter des scripts automatisés</li>
+            </ul>
+            <div class="note">
+                <strong>Pas de DOM, pas de window</strong> → mais plein de nouveaux outils natifs !
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Installation & Mise à Jour sur les 3 OS</h2>
+            <p>Node.js est disponible sur <strong>Windows, macOS et Linux</strong>. Voici les méthodes officielles et fiables.</p>
+
+            <div class="os">
+                <!-- WINDOWS -->
+                <div class="os-card win">
+                    <h4>Windows</h4>
+                    <ol>
+                        <li>Aller sur <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
+                        <li>Cliquer sur <strong>Windows Installer (.msi)</strong> → version <strong>LTS</strong></li>
+                        <li>Lancer le fichier téléchargé</li>
+                        <li><strong>Cocher</strong> : "Add to PATH" (important !)</li>
+                        <li>Suivant → Installer → Terminer</li>
+                    </ol>
+                    <div class="terminal">node --version</div>
+                    <div class="terminal">npm --version</div>
+                </div>
+
+                <!-- MACOS -->
+                <div class="os-card mac">
+                    <h4>macOS</h4>
+                    <ol>
+                        <li>Aller sur <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
+                        <li>Cliquer sur <strong>macOS Installer (.pkg)</strong> → version <strong>LTS</strong></li>
+                        <li>Ouvrir le fichier .pkg</li>
+                        <li>Suivre l’assistant → Continuer → Installer</li>
+                        <li>Mot de passe admin si demandé</li>
+                    </ol>
+                    <div class="terminal">node --version</div>
+                    <div class="terminal">npm --version</div>
+                </div>
+
+                <!-- LINUX -->
+                <div class="os-card linux">
+                    <h4>Linux (Ubuntu/Debian)</h4>
+                    <p><strong>Méthode officielle avec NodeSource</strong> (recommandée)</p>
+                    <div class="terminal">
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -<br>
+sudo apt-get install -y nodejs
+                    </div>
+                    <p>Ou via <code>snap</code> :</p>
+                    <div class="terminal">sudo snap install node --classic</div>
+                    <div class="terminal">node --version</div>
+                    <div class="terminal">npm --version</div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Vérification finale (tous les OS)</strong> :<br>
+                Ouvre un terminal → tape :
+                <div class="terminal">node -v && npm -v</div>
+                → Doit afficher les versions (ex: <code>v20.17.0</code> et <code>10.8.1</code>)
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Mise à Jour de Node.js</h2>
+            <p>Node.js sort une nouvelle version LTS tous les <strong>6 mois</strong>. Voici comment mettre à jour <strong>sans tout casser</strong>.</p>
+
+            <div class="os">
+                <!-- WINDOWS & MAC -->
+                <div class="os-card win">
+                    <h4>Windows & macOS</h4>
+                    <ol>
+                        <li>Télécharge la <strong>nouvelle version LTS</strong> sur <a href="https://nodejs.org">nodejs.org</a></li>
+                        <li>Lance l’installateur</li>
+                        <li>Il <strong>remplace automatiquement</strong> l’ancienne version</li>
+                        <li>Redémarre ton terminal</li>
+                    </ol>
+                    <div class="terminal">node -v  → v22.9.0 (nouvelle version)</div>
+                </div>
+
+                <!-- LINUX -->
+                <div class="os-card linux">
+                    <h4>Linux (NodeSource)</h4>
+                    <div class="terminal">
+# Mise à jour vers la dernière LTS
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -<br>
+sudo apt-get upgrade -y nodejs
+                    </div>
+                    <p>Ou avec <code>nvm</code> (recommandé pour devs) :</p>
+                    <div class="terminal">
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash<br>
+source ~/.bashrc<br>
+nvm install --lts<br>
+nvm use --lts
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Avec nvm (Node Version Manager)</strong> → tu peux avoir <strong>plusieurs versions</strong> en parallèle :<br>
+                <code>nvm install 18</code> → Node 18<br>
+                <code>nvm install 20</code> → Node 20<br>
+                <code>nvm use 20</code> → basculer
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Premier Script Node.js</h2>
+            <div class="step">
+                <h4>Étape 1 : Créer un dossier</h4>
+                <div class="terminal">mkdir mon-premier-node</div>
+                <div class="terminal">cd mon-premier-node</div>
+            </div>
+            <div class="step">
+                <h4>Étape 2 : Créer un fichier</h4>
+                <p>Créer <code>hello.js</code> :</p>
+                <pre><code>// hello.js
+console.log("Bonjour depuis Node.js !");
+console.log("Nous sommes le", new Date().toLocaleDateString());</code></pre>
+            </div>
+            <div class="step">
+                <h4>Étape 3 : Exécuter</h4>
+                <div class="terminal">node hello.js</div>
+                <p>Résultat :</p>
+                <div class="terminal">
+Bonjour depuis Node.js !
+Nous sommes le 16/11/2025
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Les Modules Natifs (sans installation)</h2>
+            <div class="step">
+                <h4>Module <code>fs</code> — Fichiers</h4>
+                <p>Créer <code>lire.js</code> :</p>
+                <pre><code>// lire.js
+import fs from 'fs';
+try {
+    const contenu = fs.readFileSync('hello.js', 'utf8');
+    console.log("Contenu de hello.js :\n");
+    console.log(contenu);
+} catch (err) {
+    console.log("Erreur :", err.message);
+}</code></pre>
+                <div class="terminal">node lire.js</div>
+            </div>
+            <div class="step">
+                <h4>Écriture de fichier</h4>
+                <p>Créer <code>ecrire.js</code> :</p>
+                <pre><code>// ecrire.js
+import fs from 'fs';
+const message = `Fichier généré le ${new Date().toLocaleString()}\n`;
+fs.writeFileSync('sortie.txt', message);
+console.log("Fichier 'sortie.txt' créé !");</code></pre>
+                <div class="terminal">node ecrire.js</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>6. Créer un Serveur Web (sans Express)</h2>
+            <div class="step">
+                <h4>Créer <code>server.js</code></h4>
+                <pre><code>// server.js
+import http from 'http';
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.write('&lt;h1&gt;Mon Premier Serveur Node.js !&lt;/h1&gt;');
+    res.end();
+});
+server.listen(3000, () => {
+    console.log('Serveur sur http://localhost:3000');
+});</code></pre>
+                <div class="terminal">node server.js</div>
+                <p>Ouvrir <a href="http://localhost:3000" target="_blank">localhost:3000</a></p>
+            </div>
+        </section>
+
+        <section>
+            <h2>7. Résumé & Prochaines Étapes</h2>
+            <div class="note">
+                <strong>Tu sais maintenant :</strong>
+                <ul>
+                    <li>Installer Node.js sur <strong>Windows, macOS, Linux</strong></li>
+                    <li>Mettre à jour proprement</li>
+                    <li>Exécuter des scripts</li>
+                    <li>Utiliser <code>fs</code> et <code>http</code></li>
+                </ul>
+            </div>
+            <p><strong>À explorer :</strong> <code>npm</code>, <code>express</code>, <code>API REST</code>, <code>WebSocket</code>...</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Module 5 - Node.js Natif • Installation Multi-OS</p>
+        <p><a href="index.html" style="color: white;">Retour à l'accueil</a></p>
+    </footer>
+
+    <script>
+        let counter = 1;
+        document.querySelectorAll('.step').forEach(el => {
+            el.style.counterReset = `step ${counter++}`;
+        });
+    </script>
+</body>
+</html>

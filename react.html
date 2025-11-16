@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6. React : Introduction Complète & Évolution</title>
+    <style>
+        :root {
+            --primary: #61dafb;
+            --secondary: #f8f9fa;
+            --text: #222428;
+            --code-bg: #f4f4f4;
+            --border: #ddd;
+            --old: #ff6b6b;
+            --new: #4caf50;
+            --modern: #9c27b0;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background-color: #fff;
+        }
+        header {
+            background: linear-gradient(135deg, #222428, #61dafb);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2.6rem;
+            margin-bottom: 0.5rem;
+        }
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        nav {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 1rem 0;
+        }
+        nav li {
+            margin: 0 1rem;
+        }
+        nav a {
+            text-decoration: none;
+            color: #222428;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        section {
+            margin-bottom: 3.5rem;
+            padding: 2rem;
+            background-color: var(--secondary);
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #222428;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.9rem;
+        }
+        h3 {
+            color: #222428;
+            margin: 1.8rem 0 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        h3::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+        ul, ol {
+            margin: 1.2rem 0;
+            padding-left: 2.5rem;
+        }
+        li {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .label {
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: white;
+            padding: 0 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #666;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+        .example {
+            background: white;
+            border-left: 5px solid;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .example h4 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        .example.old {
+            border-left-color: var(--old);
+        }
+        .example.new {
+            border-left-color: var(--new);
+        }
+        .example.modern {
+            border-left-color: var(--modern);
+        }
+        .example h4::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        .example.old h4::before { background: var(--old); }
+        .example.new h4::before { background: var(--new); }
+        .example.modern h4::before { background: var(--modern); }
+        .note {
+            background-color: #e3f2fd;
+            border-left: 5px solid var(--primary);
+            padding: 1.2rem;
+            margin: 1.8rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+        .warning {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 1.2rem;
+            margin: 1.8rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            color: #e65100;
+        }
+        .react-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><circle cx="0" cy="0" r="2.05" fill="%2361dafb"/><g stroke="%2361dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(-60)"/><ellipse rx="11" ry="4.2" transform="rotate(0)"/></g></svg>') no-repeat center;
+            background-size: contain;
+        }
+        footer {
+            background-color: #222428;
+            color: white;
+            text-align: center;
+            padding: 2.5rem 0;
+            margin-top: 4rem;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 0.5rem 0;
+            }
+            h2 { font-size: 1.7rem; }
+            header h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="react-logo"></div>
+        <h1>Module 6 : React — Introduction Complète</h1>
+        <p>De l’ancien au moderne : tout comprendre en détail</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="dom.html">1. DOM</a></li>
+            <li><a href="evenements.html">2. Événements</a></li>
+            <li><a href="fonctions.html">3. Fonctions</a></li>
+            <li><a href="modules-classes.html">4. Modules & Classes</a></li>
+            <li><a href="nodejs.html">5. Node.js</a></li>
+            <li><a href="react.html" class="active">6. React</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- 1. C'EST QUOI REACT & POURQUOI -->
+        <section>
+            <h2>1. C’est quoi React ? Et pourquoi l’utiliser ?</h2>
+            
+            <p><strong>React</strong> est une <strong>bibliothèque JavaScript</strong> open source créée par <strong>Facebook en 2013</strong> pour construire des <strong>interfaces utilisateur dynamiques et interactives</strong>.</p>
+
+            <div class="note">
+                <strong>React ≠ Framework</strong> → c’est une <strong>bibliothèque</strong>. Tu l’utilises <em>quand tu veux</em>, pas comme Angular qui impose tout.
+            </div>
+
+            <h3>Pourquoi utiliser React ?</h3>
+            <ul>
+                <li><strong>Réactivité automatique</strong> : quand les données changent → l’interface se met à jour <em>seule</em></li>
+                <li><strong>Composants réutilisables</strong> : un bouton, une carte, un menu → tu les crées une fois, tu les réutilises partout</li>
+                <li><strong>Performance</strong> : React utilise un <em>DOM virtuel</em> → il ne touche que ce qui change</li>
+                <li><strong>Écosystème énorme</strong> : 2 millions de paquets npm, utilisé par Netflix, Airbnb, Uber...</li>
+                <li><strong>Multiplateforme</strong> : React Native → même code pour web, iOS, Android</li>
+            </ul>
+
+            <div class="example old">
+                <h4>Sans React → HTML + JS classique</h4>
+                <pre><code>&lt;div id="compteur"&gt;0&lt;/div&gt;
+&lt;button onclick="increment()"&gt;+1&lt;/button&gt;
+
+&lt;script&gt;
+let count = 0;
+function increment() {
+    count++;
+    document.getElementById('compteur').innerText = count;
+}
+&lt;/script&gt;</code></pre>
+                <p><strong>Problème</strong> : tu dois tout gérer manuellement → code spaghetti</p>
+            </div>
+
+            <div class="example new">
+                <h4>Avec React → tout est lié automatiquement</h4>
+                <pre><code>function Compteur() {
+    const [count, setCount] = useState(0);
+    return (
+        &lt;&gt;
+            &lt;p&gt;{count}&lt;/p&gt;
+            &lt;button onClick={() => setCount(count + 1)}&gt;+1&lt;/button&gt;
+        &lt;/&gt;
+    );
+}</code></pre>
+                <p><strong>Avantage</strong> : React gère la mise à jour → tu te concentres sur la logique</p>
+            </div>
+        </section>
+
+        <!-- 2. PREMIER COMPOSANT + MODULES OBLIGATOIRES -->
+        <section>
+            <h2>2. Premier composant React — Les modules obligatoires</h2>
+
+            <p>Un <strong>composant</strong> = un morceau d’interface (bouton, carte, page). Il est <strong>réutilisable</strong> et <strong>indépendant</strong>.</p>
+
+            <h3>Les 3 modules obligatoires (via CDN)</h3>
+            <ol>
+                <li><strong><code>react</code></strong> → le cœur : crée les éléments, gère le virtuel DOM</li>
+                <li><strong><code>react-dom</code></strong> → le rendu : insère React dans le navigateur</li>
+                <li><strong><code>@babel/standalone</code></strong> → le transpileur : convertit JSX → JS pur</li>
+            </ol>
+
+            <pre><code>&lt;!-- 1. React (cœur) --&gt;
+&lt;script src="https://unpkg.com/react@18/umd/react.development.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. ReactDOM (rendu) --&gt;
+&lt;script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"&gt;&lt;/script&gt;
+
+&lt;!-- 3. Babel (JSX → JS) --&gt;
+&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;</code></pre>
+
+            <div class="note">
+                <strong>type="text/babel"</strong> → indispensable pour que Babel traite le JSX
+            </div>
+
+            <h3>Premier composant : <code>Bonjour</code></h3>
+            <pre><code>&lt;div id="root"&gt;&lt;/div&gt;
+
+&lt;script type="text/babel"&gt;
+    function Bonjour() {
+        return &lt;h1&gt;Bonjour le monde !&lt;/h1&gt;;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(&lt;Bonjour /&gt;);
+&lt;/script&gt;</code></pre>
+
+            <p><strong>Ligne par ligne :</strong></p>
+            <ul>
+                <li><code>function Bonjour()</code> → composant fonction (moderne)</li>
+                <li><code>return &lt;h1&gt;...&lt;/h1&gt;</code> → retourne du JSX</li>
+                <li><code>ReactDOM.createRoot()</code> → prépare le conteneur</li>
+                <li><code>root.render()</code> → affiche le composant</li>
+            </ul>
+        </section>
+
+        <!-- 3. JSX EN DÉTAIL -->
+        <section>
+            <h2>3. C’est quoi JSX ? Et pourquoi c’est génial ?</h2>
+
+            <p><strong>JSX</strong> = <strong>JavaScript XML</strong>. C’est une syntaxe qui permet d’écrire du <strong>HTML-like dans du JavaScript</strong>.</p>
+
+            <div class="warning">
+                <strong>Ce n’est PAS du HTML !</strong> C’est du sucre syntaxique → Babel le transforme en appels <code>React.createElement()</code>
+            </div>
+
+            <h3>Exemple avant/après</h3>
+            <pre><code>// JSX (ce que tu écris)
+&lt;div className="card"&gt;
+    &lt;h2&gt;Titre&lt;/h2&gt;
+    &lt;p&gt;Contenu&lt;/p&gt;
+&lt;/div&gt;
+
+// ↓ Babel transforme en ↓
+
+React.createElement("div", { className: "card" },
+    React.createElement("h2", null, "Titre"),
+    React.createElement("p", null, "Contenu")
+);</code></pre>
+
+            <h3>Règles JSX importantes</h3>
+            <ul>
+                <li><code>class</code> → <code>className</code> (car <code>class</code> est un mot réservé JS)</li>
+                <li><code>for</code> → <code>htmlFor</code></li>
+                <li><strong>Toutes les balises doivent être fermées</strong> : <code>&lt;br /&gt;</code></li>
+                <li><strong>Un seul élément racine</strong> → utilise <code>&lt;&gt;&lt;/&gt;</code> (Fragment)</li>
+                <li>Expressions JS dans <code>{}</code> : <code>&lt;p&gt;2 + 2 = {2+2}&lt;/p&gt;</code></li>
+            </ul>
+
+            <div class="note">
+                <strong>Pourquoi JSX ?</strong> Parce que <strong>UI = données + logique</strong>. Mettre les deux au même endroit = plus clair, plus maintenable.
+            </div>
+        </section>
+
+        <!-- 4. 2 EXEMPLES : ANCIENNE VS NOUVELLE FAÇON -->
+        <section>
+            <h2>4. Deux exemples clairs : Classe vs Fonction</h2>
+
+            <div class="example old">
+                <h4>Exemple 1 : Compteur avec <strong>Classe</strong> (2013–2018)</h4>
+                <pre><code>class CompteurClasse extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { count: 0 };
+        this.increment = this.increment.bind(this); // Obligatoire !
+    }
+
+    increment() {
+        this.setState({ count: this.state.count + 1 });
+    }
+
+    render() {
+        return (
+            &lt;div&gt;
+                &lt;p&gt;Compte : {this.state.count}&lt;/p&gt;
+                &lt;button onClick={this.increment}&gt;+1&lt;/button&gt;
+            &lt;/div&gt;
+        );
+    }
+}</code></pre>
+                <p><strong>Points clés :</strong> <code>this.state</code>, <code>this.setState()</code>, <code>bind()</code> dans le constructeur</p>
+            </div>
+
+            <div class="example new">
+                <h4>Exemple 2 : Même compteur avec <strong>Hooks</strong> (depuis 2019)</h4>
+                <pre><code>function CompteurFonction() {
+    const [count, setCount] = React.useState(0);
+
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Compte : {count}&lt;/p&gt;
+            &lt;button onClick={() => setCount(count + 1)}&gt;+1&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}</code></pre>
+                <p><strong>Avantages :</strong> Moins de code, pas de <code>this</code>, plus lisible, réutilisable</p>
+            </div>
+
+            <div class="note">
+                <strong>En 2025</strong> → <strong>99 % des nouveaux projets utilisent les hooks</strong>.<br>
+                <strong>Mais comprendre les classes</strong> = comprendre l’évolution et les projets legacy.
+            </div>
+        </section>
+
+        <!-- 5. EXEMPLE MODERNE -->
+        <section>
+            <h2>5. Exemple moderne : Todo List avec hooks</h2>
+
+            <div class="example modern">
+                <h4>Todo App complète (useState + useEffect)</h4>
+                <pre><code>&lt;script type="text/babel"&gt;
+function TodoApp() {
+    const [todos, setTodos] = React.useState([]);
+    const [input, setInput] = React.useState('');
+
+    // Charge les todos depuis localStorage
+    React.useEffect(() => {
+        const saved = localStorage.getItem('todos');
+        if (saved) setTodos(JSON.parse(saved));
+    }, []);
+
+    // Sauvegarde à chaque changement
+    React.useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(todos));
+    }, [todos]);
+
+    const ajouter = () => {
+        if (input.trim()) {
+            setTodos([...todos, { id: Date.now(), texte: input, fait: false }]);
+            setInput('');
+        }
+    };
+
+    const toggle = (id) => {
+        setTodos(todos.map(t => 
+            t.id === id ? { ...t, fait: !t.fait } : t
+        ));
+    };
+
+    const supprimer = (id) => {
+        setTodos(todos.filter(t => t.id !== id));
+    };
+
+    return (
+        &lt;div style={{maxWidth: 500, margin: 'auto', padding: 20}}&gt;
+            &lt;h1&gt;Ma Todo List&lt;/h1&gt;
+            &lt;div&gt;
+                &lt;input 
+                    value={input} 
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && ajouter()}
+                    placeholder="Nouvelle tâche"
+                /&gt;
+                &lt;button onClick={ajouter}&gt;Ajouter&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;ul style={{listStyle: 'none', padding: 0}}&gt;
+                {todos.map(todo => (
+                    &lt;li key={todo.id} style={{
+                        display: 'flex', justifyContent: 'space-between',
+                        padding: '10px', margin: '5px 0',
+                        background: todo.fait ? '#e0f7fa' : '#fff',
+                        textDecoration: todo.fait ? 'line-through' : 'none'
+                    }}&gt;
+                        &lt;span onClick={() => toggle(todo.id)} style={{cursor: 'pointer'}}&gt;
+                            {todo.texte}
+                        &lt;/span&gt;
+                        &lt;button onClick={() => supprimer(todo.id)} style={{color: 'red'}}&gt;✕&lt;/button&gt;
+                    &lt;/li&gt;
+                ))}
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(&lt;TodoApp /&gt;);
+&lt;/script&gt;</code></pre>
+                <p><strong>Fonctionnalités :</strong> Ajouter, cocher, supprimer, persistance dans <code>localStorage</code></p>
+            </div>
+        </section>
+
+        <!-- RÉSUMÉ -->
+        <section>
+            <h2>Résumé final</h2>
+            <div class="note">
+                <strong>Tu maîtrises maintenant :</strong>
+                <ul>
+                    <li>React = bibliothèque pour UI dynamique</li>
+                    <li>3 modules CDN obligatoires</li>
+                    <li>JSX = HTML dans JS (avec règles)</li>
+                    <li>Composants classe vs fonction + hooks</li>
+                    <li>Todo List moderne avec persistance</li>
+                </ul>
+            </div>
+
+            <p><strong>Prochaines étapes :</strong> Vite, React Router, API avec <code>fetch</code>, TypeScript...</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Module 6 - React : De l’Ancien au Moderne • 16 novembre 2025</p>
+        <p><a href="index.html" style="color: white;">Retour à l'accueil</a></p>
+    </footer>
+</body>
+</html>
